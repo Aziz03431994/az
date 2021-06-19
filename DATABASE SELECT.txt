@@ -1,0 +1,90 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+using System.Data;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Web.Security;
+
+namespace Final_year_Project
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+            if (Session["Useremail"] != null) {
+                Response.Redirect("Redirectform.aspx");
+
+            }
+
+
+        }
+
+        protected void ValidateUser(object sender, EventArgs e)
+        {
+            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("select * from UserData where Email=@Email and Password=@Password", con);
+            cmd.Parameters.AddWithValue("@Email", txtUsername.Text);
+            cmd.Parameters.AddWithValue("@Password", txtPassword.Text);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            if (dt.Rows.Count.ToString()=="1")
+
+            {
+
+               Session["Useremail"] = txtUsername.Text;
+                Response.Redirect("Main_page.aspx");
+                //Session.RemoveAll();
+
+               // Response.Redirect("Details.aspx");
+
+            }
+            else
+            {
+                ClientScript.RegisterStartupScript(Page.GetType(), "validation", "<script language='javascript'>alert('Invalid Username and Password')</script>");
+
+
+
+
+
+            }
+
+            con.Close();
+        }
+
+
+        protected void ValidateUser2(object sender, EventArgs e)
+        {
+            Response.Redirect("Index.aspx");
+        }
+
+
+
+
+
+        }
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+   

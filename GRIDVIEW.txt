@@ -1,0 +1,96 @@
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Net.Http;
+using System.Data;
+
+namespace Final_year_Project
+{
+    public partial class Redirectform : System.Web.UI.Page
+    {
+       
+        protected void Page_Load(object sender, EventArgs e)
+
+
+
+        {
+
+
+            
+
+
+            if (Session["Useremail"] != null)
+            {
+                Label1.Text = Session["Useremail"].ToString();
+
+
+
+            }
+            else {
+
+                Response.Redirect("Index.aspx");
+            
+            
+            }
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            
+            Session.RemoveAll();
+            Response.Redirect("Index.aspx");
+        }
+
+
+        protected void ValidateUser24(object sender, EventArgs e)
+        {
+          
+
+            
+        }
+
+        protected void ValidateUser50(object sender, EventArgs e)
+        {
+            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("select Email,Budget,Days,Destination from UserSearch where Email=@Email", con);
+            cmd.Parameters.AddWithValue("@Email", Label1.Text);
+           
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+           GridView1.DataSource = dt;
+            GridView1.DataBind();
+
+
+
+        }
+
+        protected void ValidateUser60(object sender, EventArgs e)
+        {
+            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("select Name,Email,Password  from UserData where Email=@Email", con);
+            cmd.Parameters.AddWithValue("@Email", Label1.Text);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            GridView3.DataSource = dt;
+            GridView3.DataBind();
+        }
+        protected void ValidateUser500(object sender, EventArgs e)
+        {
+            Response.Redirect("Main_page.aspx");
+        }
+
+
+    }
+}

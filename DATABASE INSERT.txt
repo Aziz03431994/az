@@ -1,0 +1,141 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data;
+using System.Configuration;
+using System.Data.SqlClient;
+
+namespace Final_year_Project
+{
+    public partial class Index : System.Web.UI.Page
+    {
+        public string query, constr;
+        public SqlConnection con;
+        public void connection()
+        {
+            constr = ConfigurationManager.ConnectionStrings["ConnectionString"].ToString();
+            con = new SqlConnection(constr);
+            con.Open();
+
+
+        }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            connection();
+            if (Session["Useremail"] != null)
+            {
+                Response.Redirect("Redirectform.aspx");
+
+            }
+        }
+
+
+        //protected void ValidateUser(object sender, EventArgs e)
+        //{
+        //    ClientScript.RegisterStartupScript(Page.GetType(), "validation", "<script language='javascript'>alert('Invalid Username and Password')</script>");
+
+
+        //    SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString);
+        //    con.Open();
+        //    SqlCommand cmd = new SqlCommand("select * from UserData where Email=@Email and Password=@Password", con);
+        //    cmd.Parameters.AddWithValue("@Email", txtUsername.Text);
+        //    cmd.Parameters.AddWithValue("@Password", txtPassword.Text);
+        //    SqlDataAdapter da = new SqlDataAdapter(cmd);
+        //    DataTable dt = new DataTable();
+        //    da.Fill(dt);
+        //    if (dt.Rows.Count.ToString() == "1")
+
+        //    {
+
+        //        Session["Useremail"] = txtUsername.Text;
+        //        Response.Redirect("Redirect3.aspx");
+               
+        //    }
+        //    else
+        //    {
+        //        ClientScript.RegisterStartupScript(Page.GetType(), "validation", "<script language='javascript'>alert('Invalid Username and Password')</script>");
+
+
+
+
+
+        //    }
+
+        //    con.Close();
+        //}
+
+        protected void ValidateUser1(object sender, EventArgs e)
+        {
+
+
+
+
+
+            if (password.Text == cpassword.Text)
+            {
+
+                try
+                {
+                    SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString);
+                    con.Open();
+                    string insert = "insert into UserData(Name,Email,Password,ConfirmPassword)values(@Name,@Email,@Password,@ConfirmPassword)";
+                    SqlCommand cmd = new SqlCommand(insert, con);
+                    cmd.Parameters.AddWithValue("@Name", name.Text);
+                    cmd.Parameters.AddWithValue("@Email", email.Text);
+                    cmd.Parameters.AddWithValue("@Password", password.Text);
+                    cmd.Parameters.AddWithValue("@ConfirmPassword", cpassword.Text);
+                    cmd.ExecuteNonQuery();
+
+
+
+
+
+                    ClientScript.RegisterStartupScript(Page.GetType(), "validation", "<script language='javascript'>alert('successfully Inserted')</script>");
+
+                    con.Close();
+
+                }
+                catch (Exception Ex)
+                {
+                    Response.Write(Ex);
+
+
+                }
+
+
+            }
+            else
+            {
+
+              
+
+               ClientScript.RegisterStartupScript(Page.GetType(), "validation", "<script language='javascript'>alert('Please Enter correct password and confirm password e.g not Match')</script>");
+            }
+
+
+
+
+
+           
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+    }
+}
+
